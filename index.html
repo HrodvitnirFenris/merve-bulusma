@@ -165,4 +165,64 @@
     <div id="success-screen" class="hidden text-center py-6 pt-3">
       <div class="text-5xl mb-3">💌</div>
       <h3 class="text-2xl font-bold text-gray-800 mb-2">Yuppi</h3>
-      <p class="text-sm text-gray-600 mb-6">
+      <p class="text-sm text-gray-600 mb-6">Tamamdırr Görüşürüz!</p>
+      <div id="summary-box" class="bg-rose-50/85 border border-rose-200 rounded-2xl p-4 text-left text-sm text-gray-700 space-y-1"></div>
+    </div>
+
+  </div>
+
+  <audio id="bg-music" src="toz-pembe.mp3" preload="auto"></audio>
+
+  <script>
+    function goToPlan() {
+      document.getElementById('screen-intro').classList.add('hidden');
+      document.getElementById('screen-plan').classList.remove('hidden');
+    }
+
+    function dodgeButton() {
+      const btn = document.getElementById('btn-no');
+      const randomX = Math.floor(Math.random() * 240) - 120;
+      const randomY = Math.floor(Math.random() * 200) - 100;
+      btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    }
+
+    const dateInput = document.getElementById('dateInput');
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    dateInput.min = today.toISOString().split('T')[0];
+    dateInput.value = tomorrow.toISOString().split('T')[0];
+
+    async function submitPlan(e) {
+      e.preventDefault();
+      
+      const form = document.getElementById('appointment-form');
+      const submitBtn = document.getElementById('submit-btn');
+      const formData = new FormData(form);
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Gönderiliyor...";
+
+      const formspreeID = "xqpezwna"; 
+
+      try {
+        if (formspreeID !== "SENIN_FORMSPREE_KODUN") {
+          await fetch(`https://formspree.io/f/${formspreeID}`, {
+            method: 'POST',
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+          });
+        }
+
+        const plan = formData.get('plan');
+        const tarih = formData.get('tarih');
+        const saat = formData.get('saat');
+        const not = formData.get('not');
+
+        document.getElementById('summary-box').innerHTML = `
+          <p><strong>Aktivite:</strong> ${plan}</p>
+          <p><strong>Zaman:</strong> ${tarih} - ${saat}</p>
+          ${not ? `<p><strong>Not:</strong> "${not}"</p>` : ''}
+        `;
+
+        document.getElementById('plan-form').classList.add('
