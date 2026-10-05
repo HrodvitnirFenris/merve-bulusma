@@ -225,4 +225,29 @@
           ${not ? `<p><strong>Not:</strong> "${not}"</p>` : ''}
         `;
 
-        document.getElementById('plan-form').classList.add('
+        document.getElementById('plan-form').classList.add('hidden');
+        document.getElementById('success-screen').classList.remove('hidden');
+
+        // Şarkıyı 47. saniyeden başlatma ve 77. saniyede durdurma ayarı
+        const music = document.getElementById('bg-music');
+        const startTime = 47; 
+        const endTime = 77;   
+
+        music.currentTime = startTime;
+        music.play().catch(err => console.log("Otomatik oynatma engellendi:", err));
+
+        music.addEventListener('timeupdate', function() {
+          if (music.currentTime >= endTime) {
+            music.pause();
+          }
+        });
+
+      } catch (err) {
+        alert("Bir hata oluştu, lütfen tekrar dene.");
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Planı Gönder";
+      }
+    }
+  </script>
+</body>
+</html>
